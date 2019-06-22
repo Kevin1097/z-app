@@ -2,8 +2,11 @@
 
 
 import os  #nuevo
+from datetime import datetime
+#from dateutil import parser as datetime_parser
+#from dateutil.tz import tzutc
 from flask import Flask, jsonify
-from Flask_sqlalchemy import SQLAlchemy  # nuevo
+from flask_sqlalchemy import SQLAlchemy  # nuevo
 
 # instanciamos la app
 app = Flask(__name__)

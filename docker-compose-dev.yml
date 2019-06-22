@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  pedido:
+  pedidos:
     build:
       context: ./services/pedidos
       dockerfile: Dockerfile-dev
@@ -16,26 +16,28 @@ services:
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@pedidos-db:5432/pedidos_dev  # nuevo
       - DATABASE_TEST_URL=postgres://postgres:postgres@pedidos-db:5432/pedidos_test  # nuevo
+    depends_on: # nuevo
+      - pedidos-db
 
   pedidos-db: # nuevo
     build:
       context: ./services/pedidos/project/db
       dockerfile: Dockerfile
     ports:
-      - 5436:5432
+      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  admin:
-    image:  portainer/portainer:latest
-    container_name: admin
-    command: --no-auth
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /srv/docker/portainer:/data
-    ports:
-      - 12345:9000
+  #admin:
+    #image:  portainer/portainer:latest
+    #container_name: admin
+    #command: --no-auth
+    #volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock
+      #- /srv/docker/portainer:/data
+    #ports:
+      #- 12345:9000
 
 
 
