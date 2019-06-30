@@ -69,6 +69,18 @@ class TestPedidosService(BaseTestCase):
             self.assertIn('Lo siento. El usuario ya existe', data['message'])
             self.assertIn('failed', data['status'])
 
+    def test_single_customer(self):
+        """Asegurando que obtenga un customer de forma correcta"""
+        customer = Customer(name="kevinmogollon")
+        db.session.add(customer)
+        db.session.commit()
+        with self.client:
+            response = self.client.get(f'/customers/{customer.id}')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('kevinmogollon', data['data']['name'])
+            self.assertIn('success', data['status'])
+
 
 if __name__ == '__main__':
     unittest.main()

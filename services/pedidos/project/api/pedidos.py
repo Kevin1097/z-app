@@ -42,3 +42,16 @@ def add_customer():
     except exc.IntegrityError:
         db.session.rollback()
         return jsonify(response_object), 400
+
+@pedidos_blueprint.route('/customers/<customer_id>', methods=['GET'])
+def get_single_customer(customer_id):
+    """Obtener detalles de usuario único"""
+    customer = Customer.query.filter_by(id=customer_id).first()
+    response_object = {
+        'status': 'success',
+        'data': {
+            'id': customer.id,
+            'name': customer.name
+        }
+    }
+    return jsonify(response_object), 200
