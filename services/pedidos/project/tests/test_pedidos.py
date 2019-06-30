@@ -8,6 +8,13 @@ from project.api.models import Customer
 from project.tests.base import BaseTestCase
 
 
+def add_customer(name):
+    customer = Customer(name=name)
+    db.session.add(customer)
+    db.session.commit()
+    return customer
+
+
 class TestPedidosService(BaseTestCase):
     """Tests for the Users Service."""
 
@@ -71,15 +78,32 @@ class TestPedidosService(BaseTestCase):
 
     def test_single_customer(self):
         """Asegurando que obtenga un customer de forma correcta"""
-        customer = Customer(name="kevinmogollon")
-        db.session.add(customer)
-        db.session.commit()
+        customer = add_customer(name="kevinmogollon")
         with self.client:
             response = self.client.get(f'/customers/{customer.id}')
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 200)
             self.assertIn('kevinmogollon', data['data']['name'])
             self.assertIn('success', data['status'])
+
+    def test_single_customer_no_id(self):
+        """Asegúrese de que se arroje un error si no se proporciona una identificación."""
+        with self.client:
+            response = self.client.get('/customers/blah')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 404)
+            self.assertIn('El customer no existe', data['message'])
+            self.assertIn('failed', data['status'])
+ 
+    def test_single_customer_incorrect_id(self):
+        """Asegurando de que se arroje un error si la identificación no existe."""
+        with self.client:
+            response = self.client.get('/customers/999')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 404)
+            self.assertIn('El customer no existe', data['message'])
+            self.assertIn('failed', data['status'])
+
 
 
 if __name__ == '__main__':

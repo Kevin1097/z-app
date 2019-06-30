@@ -46,12 +46,22 @@ def add_customer():
 @pedidos_blueprint.route('/customers/<customer_id>', methods=['GET'])
 def get_single_customer(customer_id):
     """Obtener detalles de usuario único"""
-    customer = Customer.query.filter_by(id=customer_id).first()
     response_object = {
-        'status': 'success',
-        'data': {
-            'id': customer.id,
-            'name': customer.name
-        }
+        'status': 'failed',
+        'message': 'El customer no existe'
     }
-    return jsonify(response_object), 200
+    try:
+      customer = Customer.query.filter_by(id=int(customer_id)).first()
+      if not customer:
+          return jsonify(response_object), 404
+      else:
+        response_object = {
+          'status':'success',
+          'data':{
+            'id':customer.id,
+            'name':customer.name
+          }
+        }
+        return jsonify(response_object), 200
+    except ValueError:
+      return jsonify(response_object), 404
