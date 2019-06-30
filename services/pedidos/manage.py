@@ -29,5 +29,13 @@ def test():
     return 1
 
 
+@cli.command('seed_db')
+def seed_db():
+    """Sembrado en la base de datos"""
+    db.session.add(Customer(name='kevinmogollon'))
+    db.session.add(Customer(name='abelhuanca'))
+    db.session.commit()
+
+
 if __name__ == '__main__':
    cli()

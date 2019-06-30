@@ -104,7 +104,7 @@ class TestPedidosService(BaseTestCase):
             self.assertIn('El customer no existe', data['message'])
             self.assertIn('failed', data['status'])
 
-    def test_all_users(self):
+    def test_all_customer(self):
         """ Asegurando de que todos los usuarios se comporten correctamente."""
         add_customer('kevinmogollon')
         add_customer('abelhuanca')
