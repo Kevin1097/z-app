@@ -1,7 +1,11 @@
 # services/pedidos/project/api/pedidos.py
 
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
+
+from project.api.models import Customer
+from project import db
+from sqlalchemy import exc
 
 
 pedidos_blueprint = Blueprint('pedidos', __name__)
@@ -13,3 +17,28 @@ def ping_pong():
     'status': 'success',
     'message': 'pong'
   })
+
+@pedidos_blueprint.route('/customers', methods=['POST'])
+def add_customer():
+    post_data = request.get_json()
+    response_object = {
+        'status': 'failed',
+        'message': 'Carga invalida.'
+    }
+    if not post_data:
+        return jsonify(response_object), 400
+    name = post_data.get('name')
+    try:
+        customer = Customer.query.filter_by(name=name).first()
+        if not customer:
+            db.session.add(Customer(name=name))
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'{name} ha sido agregado !'
+            return jsonify(response_object), 201
+        else:
+            response_object['message'] = 'Lo siento. El usuario ya existe'
+            return jsonify(response_object), 400
+    except exc.IntegrityError:
+        db.session.rollback()
+        return jsonify(response_object), 400
