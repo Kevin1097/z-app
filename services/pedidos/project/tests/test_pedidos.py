@@ -104,6 +104,18 @@ class TestPedidosService(BaseTestCase):
             self.assertIn('El customer no existe', data['message'])
             self.assertIn('failed', data['status'])
 
+    def test_all_users(self):
+        """ Asegurando de que todos los usuarios se comporten correctamente."""
+        add_customer('kevinmogollon')
+        add_customer('abelhuanca')
+        with self.client:
+            response = self.client.get('/customers')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(data['data']['customer']), 2)
+            self.assertIn('kevinmogollon', data['data']['customer'][0]['name'])
+            self.assertIn('abelhuanca', data['data']['customer'][1]['name'])   
+            self.assertIn('success', data['status'])
 
 
 if __name__ == '__main__':

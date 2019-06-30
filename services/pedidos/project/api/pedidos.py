@@ -65,3 +65,14 @@ def get_single_customer(customer_id):
         return jsonify(response_object), 200
     except ValueError:
       return jsonify(response_object), 404
+
+@pedidos_blueprint.route('/customers', methods=['GET'])
+def get_all_customers():
+    """Obteniendo todos los customers"""
+    response_object = {
+        'status': 'success',
+        'data': {
+            'customer': [customer.to_json() for customer in Customer.query.all()]
+        }
+    }
+    return jsonify(response_object), 200
