@@ -77,7 +77,11 @@ def get_all_customers():
     }
     return jsonify(response_object), 200
 
-@pedidos_blueprint.route('/', methods=['GET'])
+@pedidos_blueprint.route('/', methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        name = request.form['name']
+        db.session.add(Customer(name=name))
+        db.session.commit()
     customer = Customer.query.all()
     return render_template('index.html', customers=customer)

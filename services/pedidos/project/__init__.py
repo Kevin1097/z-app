@@ -17,12 +17,13 @@ def create_app(script_info=None):
     # instanciamos la app
     app = Flask(__name__)
 
+
 # estableciendo configuracion
     app_settings = os.getenv('APP_SETTINGS')
     app.config.from_object(app_settings)
 
 # establecemos extensiones
-    db.init_app(app);
+    db.init_app(app)
 
 # registrar blueprints
     from project.api.pedidos import pedidos_blueprint
@@ -33,7 +34,7 @@ def create_app(script_info=None):
     def ctx():
         return {'app': app, 'db': db}
 
-    return app;
+    return app
 
 
 

@@ -135,6 +135,19 @@ class TestPedidosService(BaseTestCase):
             self.assertNotIn(b'<p>No hay clientes!</p>', response.data)
             self.assertIn(b'kevinmogollon', response.data)
             self.assertIn(b'abelhuanca', response.data)
+    
+    def test_main_add_users(self):
+        """ Un nuevo cliente puede add a la db mediante un POST request? ."""
+        with self.client:
+            response = self.client.post(
+                '/',
+                data=dict(name='juniormogollon'),
+                follow_redirects=True
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Todos los usuarios', response.data)
+            self.assertNotIn(b'<p>No hay usuarios!</p>', response.data)
+            self.assertIn(b'juniormogollon', response.data)
 
 
 if __name__ == '__main__':
