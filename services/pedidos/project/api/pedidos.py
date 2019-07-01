@@ -1,14 +1,14 @@
 # services/pedidos/project/api/pedidos.py
 
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 
 from project.api.models import Customer
 from project import db
 from sqlalchemy import exc
 
 
-pedidos_blueprint = Blueprint('pedidos', __name__)
+pedidos_blueprint = Blueprint('customers', __name__, template_folder='./templates')
 
 
 @pedidos_blueprint.route('/pedidos/ping', methods=['GET'])
@@ -76,3 +76,8 @@ def get_all_customers():
         }
     }
     return jsonify(response_object), 200
+
+@pedidos_blueprint.route('/', methods=['GET'])
+def index():
+    customer = Customer.query.all()
+    return render_template('index.html', customers=customer)

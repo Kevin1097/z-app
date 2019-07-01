@@ -117,6 +117,25 @@ class TestPedidosService(BaseTestCase):
             self.assertIn('abelhuanca', data['data']['customer'][1]['name'])   
             self.assertIn('success', data['status'])
 
+    def test_main_no_users(self):
+        """ La ruta principal funciona? con clientes añadidos a la db."""
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Todos los clientes', response.data)
+        self.assertIn(b'<p>No hay clientes!</p>', response.data)
+
+    def test_main_with_users(self):
+        """ La ruta principal funciona? cuando un usuario es add ."""
+        add_customer('kevinmogollon')
+        add_customer('abelhuanca')
+        with self.client:
+            response = self.client.get('/')
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Todos los clientes', response.data)
+            self.assertNotIn(b'<p>No hay clientes!</p>', response.data)
+            self.assertIn(b'kevinmogollon', response.data)
+            self.assertIn(b'abelhuanca', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()
