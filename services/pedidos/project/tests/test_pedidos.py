@@ -145,8 +145,8 @@ class TestPedidosService(BaseTestCase):
                 follow_redirects=True
             )
             self.assertEqual(response.status_code, 200)
-            self.assertIn(b'Todos los usuarios', response.data)
-            self.assertNotIn(b'<p>No hay usuarios!</p>', response.data)
+            self.assertIn(b'Todos los clientes', response.data)
+            self.assertNotIn(b'<p>No hay clientes!</p>', response.data)
             self.assertIn(b'juniormogollon', response.data)
 
 
