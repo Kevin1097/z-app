@@ -34,7 +34,7 @@ def add_customer():
             db.session.add(Customer(name=name))
             db.session.commit()
             response_object['status'] = 'success'
-            response_object['message'] = f'{name} ha sido agregado !'
+            response_object['message'] = f'{name} ha sido agregado!'
             return jsonify(response_object), 201
         else:
             response_object['message'] = 'Lo siento. El usuario ya existe'

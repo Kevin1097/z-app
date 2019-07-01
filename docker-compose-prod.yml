@@ -5,15 +5,13 @@ services:
   pedidos:
     build:
       context: ./services/pedidos
-      dockerfile: Dockerfile-dev
-    volumes:
-      - './services/pedidos:/usr/src/app'
-    ports:
-      - 5002:5000
+      dockerfile: Dockerfile-prod
+    expose:
+      - 5000
     environment:
-      - FLASK_APP=project/__init__.py
-      - FLASK_ENV=development
-      - APP_SETTINGS=project.config.DevelopmentConfig
+      #- FLASK_APP=project/__init__.py
+      - FLASK_ENV=production
+      - APP_SETTINGS=project.config.ProductionConfig
       - DATABASE_URL=postgres://postgres:postgres@pedidos-db:5432/pedidos_dev  # nuevo
       - DATABASE_TEST_URL=postgres://postgres:postgres@pedidos-db:5432/pedidos_test  # nuevo
     depends_on: # nuevo
@@ -32,21 +30,22 @@ services:
   nginx:
     build:
       context: ./services/nginx
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile-prod
     restart: always
     ports:
       - 80:80
     depends_on:
       - pedidos
-  #admin:
-    #image:  portainer/portainer:latest
-    #container_name: admin
-    #command: --no-auth
-    #volumes:
-      #- /var/run/docker.sock:/var/run/docker.sock
-      #- /srv/docker/portainer:/data
-    #ports:
-      #- 12345:9000
+
+  admin:
+    image:  portainer/portainer:latest
+    container_name: admin
+    command: --no-auth
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/docker/portainer:/data
+    ports:
+      - 12345:9000
 
 
 

@@ -38,7 +38,7 @@ class TestPedidosService(BaseTestCase):
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 201)
-            self.assertIn('kevinmogollon ha sido agregado !', data['message'])
+            self.assertIn('kevinmogollon ha sido agregado!', data['message'])
             self.assertIn('success', data['status'])
 
     def test_add_customer_invalid_json(self):
