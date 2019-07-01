@@ -1,0 +1,28 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.23.2
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  #- sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - sudo chmod +x docker-compose
+  #- sudo chmod +x /usr/local/bin/docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  #- sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+before_script:
+  #- docker-compose -f docker-compose-dev.yml up -d --build
+  #- export REACT_APP_USERS_SERVICE_URL=http://mogollon.inkatech.org.pe/
+  - docker-compose -f docker-compose-dev.yml up --build -d
+
+script:
+  - docker-compose -f docker-compose-dev.yml exec pedidos python manage.py test
+  - docker-compose -f docker-compose-dev.yml exec pedidos flake8 project
+
+after_script:
+- docker-compose -f docker-compose-dev.yml down
