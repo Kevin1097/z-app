@@ -1,8 +1,6 @@
 # services/pedidos/project/api/models.py
 
 
-from sqlalchemy.sql import func
-
 from datetime import datetime
 from project import db
 

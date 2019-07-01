@@ -8,7 +8,8 @@ from project import db
 from sqlalchemy import exc
 
 
-pedidos_blueprint = Blueprint('customers', __name__, template_folder='./templates')
+pedidos_blueprint = Blueprint(
+    'customers', __name__, template_folder='./templates')
 
 
 @pedidos_blueprint.route('/pedidos/ping', methods=['GET'])
@@ -81,6 +82,7 @@ def get_all_customers():
         }
     }
     return jsonify(response_object), 200
+
 
 @pedidos_blueprint.route('/', methods=['GET', 'POST'])
 def index():
